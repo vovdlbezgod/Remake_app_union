@@ -1,0 +1,58 @@
+<resources>
+    <string name="add">Add</string>
+    <string name="reset">Reset</string>
+    <string name="about">About</string>
+    <string name="app_name">Remake_app</string>
+    <string name="save_image">SAVE IMAGE</string>
+    <string name="select_by_mask">Select</string>
+    <string name="get_object">Get </string>
+    <string name="set_mask">Set </string>
+
+
+    <string name="title_activity_photo_editor">PhotoEditorActivity</string>
+    <string name="done">Done</string>
+    <string name="save">Save</string>
+    <string name="clear_all">Clear All</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload_dialog_title">Upload Image</string>
+    <string name="upload_picker_title">Select Picture</string>
+    <string name="directory_create_fail">Failed to create directory</string>
+    <string name="access_media_permissions_msg">To attach photos, we need to access media on your device</string>
+    <string name="continue_txt">Continue</string>
+    <string name="not_now">NOT NOW</string>
+    <string name="media_access_denied_msg">You denied storage access, no photos will be added.</string>
+
+    <string name="ic_close">"\ue918"</string>
+    <string name="ic_text">"\ue945"</string>
+    <string name="ic_draw">""\ue944</string>
+    <string name="ic_images">"\ue949"</string>
+    <string name="ic_save">"\ue946"</string>
+    <string name="ic_clear_all">"\ue947"</string>
+    <string name="ic_continue">"\ue948"</string>
+    <string name="ic_delete">"\ue92c"</string>
+    <string name="choose_from_gallery">Choose From Gallery</string>
+    <string name="choose_from_camera">Choose From Camera</string>
+    <string name="undo">Undo</string>
+    <string name="erase">Erase</string>
+    <string name="text_favorites">fav</string>
+    <string name="text_schedules">schedule</string>
+    <string name="text_music">music</string>
+    <string name="menu_fixed">gh</string>
+    <string name="recover">RECOVER</string>
+    <string name="edit">EDIT</string>
+
+    <string name="label_brush">Brush</string>
+    <string name="label_emoji">Emoji</string>
+    <string name="label_sticker">Delete</string>
+    <string name="label_eraser">Eraser</string>
+    <string name="label_text">Text</string>
+    <string name="label_filter">Filter</string>
+    <string name="label_adjust">Adjust</string>
+    <string name="label_recover">Recover</string>
+    <string name="label_return">Return</string>
+
+    <string name="title_home">Home</string>'
+    <string name="title_change">Wardrobe</string>
+    <string name="title_save">Save</string>
+</resources>

@@ -1,0 +1,19 @@
+# Remove containers
+docker ps -aq --no-trunc -f status=exited | xargs docker rm
+
+# Start tf-serving segmentation container
+docker run -it -p 9000:9000 --name tf-serve-seg -v $(pwd)/serve/:/serve/ epigramai/model-server:light-1.5 --port=9000 --model_name=model --model_base_path=/serve/model
+
+# Start tf-serving inpainting container 
+docker run -it -p 9001:9001 --name tf-serve-inp -v $(pwd)/serve/:/serve/ epigramai/model-server:light-1.5 --port=9001 --model_name=model2 --model_base_path=/serve/model2
+
+# Start server
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION='python'
+/usr/bin/python3 client.py
+
+# Start curl client for segmentation testing
+curl -X POST -F 'data=@/home/k33p/Downloads/255.jpg' http://localhost:3001/segmentation
+
+# Start curl client for inpainting testing 
+curl -X POST -F 'data=@/home/k33p/Downloads/255.jpg' -F 'mask=@/home/k33p/Downloads/tfserving_exp/tfserving-python-predict-client/mask_1.jpg' http://localhost:3001/inpainting 
+

@@ -1,1 +1,2 @@
-# Remake_app_union
+# SmartEditor
+Android smart editor app
