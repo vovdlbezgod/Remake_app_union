@@ -66,8 +66,8 @@ class  RemakeTensorflowServingClientTest {
         //println("Test server URL: ${config.serverEndpoint}${config.serverSegmentationPath}")
         val result: String? = client.getPhotoSegmentationJSON(photo)
 
-        val masksContainer = BoxesMasksContainer()
-        masksContainer.parseMasksFromString(result!!, client)
+        //val masksContainer = BoxesMasksContainer()
+        //masksContainer.parseMasksFromString(result!!, client)
         //println("Hello: ${boxesAndBitmapsContainer.bitmapContainingPoint(Pair(0.5f, 0.3f))}")
         //val box = Box()
 

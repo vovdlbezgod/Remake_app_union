@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -27,11 +28,17 @@ import com.example.photoeditor.SaveSettings
 import com.k33p.remake_app.R
 import com.k33p.remake_app.R.drawable.aa
 import com.k33p.remake_app.activities.StickerBSFragment
+import com.k33p.remake_app.net.OkhttpRemakeTensorflowServingHTTPClient
+import com.k33p.remake_app.nnclient.NNClient
+import com.k33p.remaketensorflowservingclient.helpers.RemakeTensorflowClientConfig
 import kotlinx.android.synthetic.main.activity_changing_cloth.*
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import org.jetbrains.anko.toast
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class changing_cloth : MediaActivity(), StickerBSFragment.StickerListener{
     override fun onPhotoTaken() {
@@ -39,14 +46,24 @@ class changing_cloth : MediaActivity(), StickerBSFragment.StickerListener{
     }
 
     override fun onStickerClick(bitmap: Int) {
-        var res = when(bitmap){
+        /*var res = when(bitmap){
             2131230815 -> BitmapFactory.decodeResource(resources, R.drawable.res_b)
             2131230816 -> BitmapFactory.decodeResource(resources, R.drawable.res_c)
             2131230817 -> BitmapFactory.decodeResource(resources, R.drawable.res_d)
             2131230821 -> BitmapFactory.decodeResource(resources, R.drawable.res_f)
             else -> localBitmap
+        }*/
+        //drawBitmap(this, res)
+        try{
+            choosenClothes = BitmapFactory.decodeResource(resources, bitmap)
+            showLoading("Changing your T-Shirt")
+            returnBackWithSavedClothes()
+            getImageInpainting(this, selectedImagePathClothChangActivity.toString(), choosenClothesPath)
+            hideLoading()
         }
-        drawBitmap(this, res)
+        catch (e:Exception){
+            Log.e("getChanginClothe", e.message)
+        }
     }
 
     private var selectedImagePathClothChangActivity: String? = null
@@ -55,6 +72,10 @@ class changing_cloth : MediaActivity(), StickerBSFragment.StickerListener{
     private var imageView: PhotoEditorView? = null
     private var mPhotoEditor: PhotoEditor? = null
     private var mStickerBSFragment: StickerBSFragment? = null
+    private var config: RemakeTensorflowClientConfig? = null
+    private var client: OkhttpRemakeTensorflowServingHTTPClient? = null
+    private var choosenClothes: Bitmap? = null
+    private var choosenClothesPath: String? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -90,6 +111,8 @@ class changing_cloth : MediaActivity(), StickerBSFragment.StickerListener{
 
     fun activityInit() {
         try {
+            config = RemakeTensorflowClientConfig(this)
+            client = config!!.client
             imageView = findViewById<View>(R.id.imageShow) as PhotoEditorView
             val selectedImagePath = intent.extras!!.getString("selectedImagePath")
             getImage(this, selectedImagePath)
@@ -165,6 +188,57 @@ class changing_cloth : MediaActivity(), StickerBSFragment.StickerListener{
             }
 
         }
+    }
+
+    fun getImageInpainting(activity: Activity, imagePath: String, maskPath: String?) {
+        Thread {
+            val bitmap = client!!.getChangingClothes(File(imagePath), File(maskPath))
+            activity.runOnUiThread {
+                imageView!!.source.setImageBitmap(bitmap)
+                Log.e(TAG, "Picture established")
+            }
+        }.start()
+    }
+
+    fun returnBackWithSavedClothes() {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageName = "IMG_$timeStamp.jpg"
+
+        val returnIntent = Intent()
+        returnIntent.putExtra("imagePath", saveChoosen("CameraDemo/Temp", imageName))
+        Log.d(TAG, "setResult")
+        setResult(Activity.RESULT_OK, returnIntent)
+        Log.d(TAG, "after setResult")
+    }
+
+    fun saveChoosen(folderName: String, imageName: String): String {
+        var selectedOutputPath = ""
+        if (isSDCARDMounted) {
+            val mediaStorageDir = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), folderName)
+            // Create a storage directory if it does not exist
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
+                    Log.d(TAG, "Failed to create directory")
+                }
+            }
+            // Create a media file name
+            selectedOutputPath = mediaStorageDir.path + File.separator + imageName
+            Log.d(TAG, "selected camera path $selectedOutputPath")
+            val file = File(selectedOutputPath)
+            try {
+                val out = FileOutputStream(file)
+                choosenClothes!!.compress(Bitmap.CompressFormat.PNG, 80, out)
+                out.flush()
+                out.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+        //TODO
+        choosenClothesPath = selectedOutputPath
+        return selectedOutputPath
     }
 
 }

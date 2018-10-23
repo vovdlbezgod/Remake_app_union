@@ -14,11 +14,34 @@ interface RemakeTensorflowServingHTTPClient {
     fun getPhotoSegmentationJSON(photo: File): String?
     fun getPhotoInpainting(photo: File, mask: File): Bitmap?
     fun getPhotoByURL(path: String) : Bitmap?
+    fun getChangingClothes(photo: File, cloth: File): Bitmap?
 }
 
 // TODO rewrite this staff
 class OkhttpRemakeTensorflowServingHTTPClient(val config: RemakeTensorflowClientConfig)
     : RemakeTensorflowServingHTTPClient {
+    override fun getChangingClothes(photo: File, cloth: File): Bitmap? {
+        try {
+            val reqBody: RequestBody = buildRequestBody(photo, cloth)
+            val request = buildPostRequest(config.serverEndpoint, config.serverWardrobePath,
+                    reqBody)
+            val client = OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .build()
+            client.connectTimeoutMillis()
+            val response = client.newCall(request).execute()
+            Log.i("Response", "uploadImage:" + response.body()!!.source().toString())
+
+            val inputStream = response.body()!!.byteStream()
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            return bitmap
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error: " + e.toString())
+            return null
+        }    }
 
     // TODO refactor this hack after server refactoring (adding cache for each user)
 

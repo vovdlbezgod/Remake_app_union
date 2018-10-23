@@ -24,6 +24,11 @@ class RemakeTensorflowClientConfig(val context: Context) {
         set(serverSegmentationPath) = prefs.edit().putString(SERVER_INPAINTING_PATH,
                 serverSegmentationPath).apply()
 
+    var serverWardrobePath: String
+        get() = prefs.getString(SERVER_WARDROBE_PATH, DEFAULT_SERVER_WARDROBE_PATH)
+        set(serverSegmentationPath) = prefs.edit().putString(SERVER_WARDROBE_PATH,
+                serverSegmentationPath).apply()
+
     var serverEndpoint: String
         get() = prefs.getString(SERVER_ENDPOINT, DEFAULT_SERVER_ENDPOINT)
         set(serverEndpoint) = prefs.edit().putString(SERVER_ENDPOINT, serverEndpoint).apply()

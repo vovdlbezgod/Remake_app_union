@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SmartEditor-Vladimir Optimiz.iml" filepath="$PROJECT_DIR$/SmartEditor-Vladimir Optimiz.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Remake_app_union.iml" filepath="$PROJECT_DIR$/Remake_app_union.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/photoeditor/photoeditor.iml" filepath="$PROJECT_DIR$/photoeditor/photoeditor.iml" />
     </modules>
